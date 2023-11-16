@@ -45,12 +45,12 @@ def get_free_window(busy: list[dict], slot_length: int) -> list:
     for start, stop in busy_time:
         while current_time < start and (start - current_time >= dt.timedelta(minutes=30)):
             free_window.append(current_time.time())
-            current_time += dt.timedelta(minutes=30)
+            current_time += dt.timedelta(minutes=slot_length)
         current_time = stop
 
     while current_time < end_job and (end_job - current_time > dt.timedelta(minutes=30)):
         free_window.append(current_time.time())
-        current_time += dt.timedelta(minutes=30)
+        current_time += dt.timedelta(minutes=slot_length)
 
     return free_window    
 
