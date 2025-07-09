@@ -43,7 +43,7 @@ def get_free_window(busy: list[dict], slot_length: int) -> list:
     # алгоритм для вычисления свободных окон и добавления в список free_window
     current_time = start_job
     for start_time, stop_time in busy_time:
-        while current_time < start_time and (start_time - current_time >= dt.timedelta(minutes=30) or start_time - current_time >= dt.timedelta(minutes=0)):
+        while current_time < start_time and (start_time - current_time >= dt.timedelta(minutes=30) or start_time - current_time == dt.timedelta(minutes=0)):
             free_window.append(current_time.strftime(pattern))
             current_time += dt.timedelta(minutes=slot_length)
         current_time = stop_time
