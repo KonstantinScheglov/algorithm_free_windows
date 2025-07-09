@@ -2,8 +2,8 @@ import datetime as dt
 
 # список занятых часов, которые нужно учитывать
 busy = [
-{'start' : '10:30',
-'stop' : '10:50'
+{'start' : '09:00',
+'stop' : '09:40'
 },
 {'start' : '18:40',
 'stop' : '18:50'
@@ -14,8 +14,8 @@ busy = [
 {'start' : '16:40',
 'stop' : '17:20'
 },
-{'start' : '20:05',
-'stop' : '20:20'
+{'start' : '20:50',
+'stop' : '21:00'
 }
 ]
 
@@ -35,21 +35,21 @@ def get_free_window(busy: list[dict], slot_length: int) -> list:
         start = str_to_time(item['start'], pattern)
         stop = str_to_time(item['stop'], pattern)
         busy_time.append((start, stop))
-    busy_time.sort(key=lambda x: x[1])
+    busy_time.sort(key=lambda x: x[0])
 
     # результативный список свободных окон
     free_window = []
 
     # алгоритм для вычисления свободных окон и добавления в список free_window
     current_time = start_job
-    for start, stop in busy_time:
-        while current_time < start and (start - current_time >= dt.timedelta(minutes=30)):
-            free_window.append(current_time.time())
+    for start_time, stop_time in busy_time:
+        while current_time < start_time and (start_time - current_time >= dt.timedelta(minutes=30) or start_time - current_time >= dt.timedelta(minutes=0)):
+            free_window.append(current_time.strftime(pattern))
             current_time += dt.timedelta(minutes=slot_length)
-        current_time = stop
+        current_time = stop_time
 
-    while current_time < end_job and (end_job - current_time > dt.timedelta(minutes=30)):
-        free_window.append(current_time.time())
+    while current_time < end_job and (end_job - current_time >= dt.timedelta(minutes=30)):
+        free_window.append(current_time.strftime(pattern))
         current_time += dt.timedelta(minutes=slot_length)
 
     return free_window    
